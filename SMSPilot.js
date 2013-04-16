@@ -3,6 +3,7 @@ var http = require("http"),
 	EventEmitter=require('events').EventEmitter;
 var SMSPilot=function(apikey){
 	this.apikey=apikey;
+	this.storage={};
 }
 util.inherits(SMSPilot, EventEmitter);
 SMSPilot.prototype.set=function(name,val){
@@ -36,8 +37,8 @@ SMSPilot.prototype.send=function(){
 			self.emit("sent");
 			res.setEncoding('utf8');
 			res.on('data', function(chunk){
-				var response=JSON.stringify(chunk);
-				if(typeof json.error!="undefined")
+				var response=JSON.parse(chunk);
+				if(typeof response.error!="undefined")
 					self.emit("error",response);
 				else
 					self.emit("ready",response);
@@ -45,7 +46,6 @@ SMSPilot.prototype.send=function(){
 		}
 	);
 	request.on('error', function(e){
-		self.emit("error",e);
 		throw new Error(e);
 	});
 	request.end(data);
