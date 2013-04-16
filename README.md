@@ -13,7 +13,7 @@ sms.send()// Отправка СМС
 * Баланс
 */
 sms.on("sent",function(response){
-  console.log("SMS sent. Your balance is"+response.balance)  
+  console.log("SMS sent. Your balance is "+response.balance)  
 })
 sms.on("error",function(err){
   throw new Error(err);
